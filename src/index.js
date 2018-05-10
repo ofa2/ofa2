@@ -1,6 +1,5 @@
 import { isString, isFunction } from 'lodash';
 import EventEmitter from 'events';
-import { resolve as pathResolve } from 'path';
 import Promise from 'bluebird';
 
 const symbolLift = Symbol('_lift');
@@ -66,10 +65,7 @@ class Ofa2 extends EventEmitter {
       try {
         /* eslint-disable global-require */
         /* eslint-disable import/no-dynamic-require */
-        middleware = require(pathResolve(
-          this.projectPath,
-          `../node_modules/ofa2-${middlewareName}`
-        ));
+        middleware = require(`ofa2-${middlewareName}`);
       }
       catch (e) {
         // eslint-disable-next-line no-console
