@@ -57,10 +57,7 @@ class Ofa2 extends EventEmitter {
 
   use(middlewareName) {
     let middleware;
-    if (isFunction(middlewareName)) {
-      middleware = middlewareName;
-    }
-    else if (isString(middlewareName)) {
+    if (isString(middlewareName)) {
       // TODO: 等待 import 支持 动态导入后取出 require;
       try {
         /* eslint-disable global-require */
@@ -74,7 +71,7 @@ class Ofa2 extends EventEmitter {
       }
     }
     else {
-      throw new Error('middleware should be string or function');
+      middleware = middlewareName;
     }
 
     this.middlewares.push(middleware.default ? middleware.default : middleware);
@@ -107,9 +104,14 @@ class Ofa2 extends EventEmitter {
   }
 
   lift() {
-    this.promise = this.promise.then(() => {
-      this[symbolLift]();
-    });
+    this.promise = this.promise
+      .then(() => {
+        return this[symbolLift]();
+      })
+      .catch((e) => {
+        this.logger.warn(e);
+        process.exit(1);
+      });
     return this;
   }
 
