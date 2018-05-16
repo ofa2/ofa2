@@ -53,6 +53,7 @@ class Ofa2 extends EventEmitter {
     global.logger = console;
     global.logger.trace = global.logger.log;
     global.logger.debug = global.logger.log;
+    this.logger = global.logger;
   }
 
   use(middlewareName) {
